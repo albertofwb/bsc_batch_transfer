@@ -2,11 +2,10 @@ from web3 import Web3
 from config import abi
 from private import private_key, contract_address
 
-nonce = None
-
 
 class BscTransfer:
     def __init__(self):
+        self._nonce = None
         self._private_key = private_key
         self.bsc = "https://bsc-dataseed.binance.org/"
         self.web3 = Web3(Web3.HTTPProvider(self.bsc))
@@ -25,6 +24,13 @@ class BscTransfer:
         print(f"Token Symbol: {symbol}")
         print(f"Total Supply: {self.web3.from_wei(total_supply, 'ether')} {symbol}")
 
+    def get_next_nonce(self, from_address: str) -> int:
+        if self._nonce is None:
+            self._nonce = self.web3.eth.get_transaction_count(self.to_checksum_address(from_address))
+        else:
+            self._nonce += 1
+        return self._nonce
+
     def to_checksum_address(self, address):
         return self.web3.to_checksum_address(address)
 
@@ -42,13 +48,7 @@ class BscTransfer:
 
         amount_wei = self.web3.to_wei(amount, 'ether')
 
-        # 在以太坊和类似的区块链网络中，每个地址都有一个 nonce 值，它代表该地址发送的交易数量。每次发送新交易时，nonce 值都应该比上一次交易的 nonce 值高 1
-        global nonce
-        if nonce is None:
-            nonce = self.web3.eth.get_transaction_count(source_address)
-        else:
-            nonce += 1
-
+        nonce = self.get_next_nonce(from_address)
         gas_price = self.web3.eth.gas_price
         gas_limit = 100000
 
