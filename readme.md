@@ -50,7 +50,7 @@ python main.py /path/to/txt_file
 - 鸟币合约地址: 0xde6e12bdb2062dc48b409f0086219464a0c317a0 
 - 鸟币官网  https://niaocoin.xyz/
 - 鸟币 tg 群 https://t.me/NIAOCOIN
-
+- 鸟币交易记录在线查看 https://bscscan.com/token/0xde6e12bdb2062dc48b409f0086219464a0c317a0
 
 ## 特别鸣谢
 
