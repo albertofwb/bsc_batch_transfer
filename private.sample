@@ -1,0 +1,5 @@
+from_address = 'xxx'
+private_key = 'xxx'
+
+# niao token contract address
+contract_address = '0xde6e12bdb2062dc48b409f0086219464a0c317a0'
