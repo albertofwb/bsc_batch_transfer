@@ -1,5 +1,5 @@
 from web3 import Web3
-from config import abi
+from config import abi, gas_limit, chain_id
 from private import private_key, contract_address
 
 
@@ -50,10 +50,9 @@ class BscTransfer:
 
         nonce = self.get_next_nonce(from_address)
         gas_price = self.web3.eth.gas_price
-        gas_limit = 100000
 
         token_tx = self.contract.functions.transfer(destination_address, amount_wei).build_transaction({
-            'chainId': 56,
+            'chainId': chain_id,
             'gas': gas_limit,
             'gasPrice': gas_price,
             'nonce': nonce,

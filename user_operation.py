@@ -7,6 +7,8 @@ def read_address_from_file(file_path: str):
     with open(file_path, 'r') as f:
         for line in f:
             line = line.strip()
+            if line.startswith('#'):
+                continue
             tmp = line.split(',')
             if len(tmp) != 2:
                 raise ValueError(f"Invalid address file format {line}")

@@ -1,5 +1,8 @@
 import json
 
+gas_limit = 100000
+chain_id = 56
+
 abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],'
                  '"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{'
                  '"name":"spender","type":"address"},{"name":"tokens","type":"uint256"}],"name":"approve","outputs":['
