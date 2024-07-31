@@ -1,5 +1,5 @@
 from bsc_transfer import BscTransfer
-from private import from_address
+from private import wallet_address
 
 
 def read_address_from_file(file_path: str):
@@ -19,4 +19,16 @@ def read_address_from_file(file_path: str):
 def batch_transfer(file_path: str):
     bsc = BscTransfer()
     for addr, amount in read_address_from_file(file_path):
-        bsc.transfer(from_address, addr, float(amount))
+        bsc.transfer(wallet_address, addr, float(amount))
+
+
+def auto_trade():
+    from bsc_trader import BscTrader
+    trader = BscTrader()
+    # trader.sell(trader.token_balance)
+    # trader.sell(1)
+    trader.buy(1)
+
+
+if __name__ == '__main__':
+    auto_trade()

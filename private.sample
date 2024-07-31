@@ -1,4 +1,4 @@
-from_address = 'xxx'
+wallet_address = 'xxx'
 private_key = 'xxx'
 
 # niao token contract address

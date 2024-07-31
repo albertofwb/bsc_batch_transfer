@@ -1,5 +1,3 @@
-import json
-
 gas_limit = 100000
 chain_id = 56
 

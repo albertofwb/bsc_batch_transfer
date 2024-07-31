@@ -1,15 +1,20 @@
 from web3 import Web3
+from web3.middleware import geth_poa_middleware
 from config import abi, gas_limit, chain_id
-from private import private_key, contract_address
+from private import private_key, contract_address, wallet_address
 
 
 class BscTransfer:
     def __init__(self):
         self._nonce = None
+        self.my_address_str = wallet_address
         self._private_key = private_key
         self.bsc = "https://bsc-dataseed.binance.org/"
         self.web3 = Web3(Web3.HTTPProvider(self.bsc))
+        self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)
         self.trans_count = 0
+        self.source_checksum_address = self.to_checksum_address(self.my_address_str)
+
         if not self.web3.is_connected():
             raise Exception("Failed to connect to BSC network")
         print("Connected to BSC network")
@@ -24,9 +29,9 @@ class BscTransfer:
         print(f"Token Symbol: {symbol}")
         print(f"Total Supply: {self.web3.from_wei(total_supply, 'ether')} {symbol}")
 
-    def get_next_nonce(self, from_address: str) -> int:
+    def get_next_nonce(self) -> int:
         if self._nonce is None:
-            self._nonce = self.web3.eth.get_transaction_count(self.to_checksum_address(from_address))
+            self._nonce = self.web3.eth.get_transaction_count(self.source_checksum_address)
         else:
             self._nonce += 1
         return self._nonce
@@ -35,12 +40,10 @@ class BscTransfer:
         return self.web3.to_checksum_address(address)
 
     def transfer(self, from_address: str, receive_address: str, amount: float):
-
         if not self.web3.is_address(from_address) or not self.web3.is_address(receive_address):
             raise ValueError("Invalid address provided")
-        source_address = self.to_checksum_address(from_address)
         destination_address = self.to_checksum_address(receive_address)
-        balance = self.contract.functions.balanceOf(source_address).call()
+        balance = self.contract.functions.balanceOf(self.source_checksum_address).call()
         print(f"Balance of sender: {self.web3.from_wei(balance, 'ether')} tokens")
 
         if balance < amount:
@@ -48,7 +51,7 @@ class BscTransfer:
 
         amount_wei = self.web3.to_wei(amount, 'ether')
 
-        nonce = self.get_next_nonce(from_address)
+        nonce = self.get_next_nonce()
         gas_price = self.web3.eth.gas_price
 
         token_tx = self.contract.functions.transfer(destination_address, amount_wei).build_transaction({
