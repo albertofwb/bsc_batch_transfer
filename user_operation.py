@@ -17,5 +17,4 @@ def read_address_from_file(file_path: str):
 def batch_transfer(file_path: str):
     bsc = BscTransfer()
     for addr, amount in read_address_from_file(file_path):
-        print(f"Transferring {amount} tokens to {addr}")
         bsc.transfer(from_address, addr, float(amount))

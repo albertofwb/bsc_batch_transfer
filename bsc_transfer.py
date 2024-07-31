@@ -10,6 +10,7 @@ class BscTransfer:
         self._private_key = private_key
         self.bsc = "https://bsc-dataseed.binance.org/"
         self.web3 = Web3(Web3.HTTPProvider(self.bsc))
+        self.trans_count = 0
         if not self.web3.is_connected():
             raise Exception("Failed to connect to BSC network")
         print("Connected to BSC network")
@@ -64,7 +65,8 @@ class BscTransfer:
         # Wait for transaction receipt
         tx_receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
         if tx_receipt['status'] == 1:
-            print(f"Transaction successful. {amount} tokens transferred to {receive_address} {tx_hash.hex()}")
+            self.trans_count += 1
+            print(f"{self.trans_count} transferred {amount} tokens to {receive_address}")
         else:
-            print("Transaction failed")
+            print(f"Transaction failed. {amount} tokens to {receive_address}")
 
