@@ -19,7 +19,7 @@ pip install -r requirements.txt
 2. 在  private.py 文件中更新你的钱包地址和私钥
 
     ```python
-    from_address = 'xxx'
+    wallet_address = 'xxx'
     private_key = 'xxx'
     ```
 
