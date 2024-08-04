@@ -1,1 +1,3 @@
 web3==6.20.1
+gspread
+oauth2client
